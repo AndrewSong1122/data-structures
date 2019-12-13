@@ -3,64 +3,55 @@ var AdvHashTable = function() {
   this._loadFactor;
   this._occupied = 0;
   this._storage = LimitedArray(this._limit);
+  this._testPair1;
+  this._testPair2;
 };
 
 AdvHashTable.prototype.insert = function(k, v) {
-  var index = getIndexBelowMaxForKey(k, this._limit);
-
-  	var pair = {};
-  	pair[k] = v;
-  	this._occupied++;
-
-	for (var i = index; i < this._limit; i++)
-	{
-		if (this._storage.get(i) === undefined) {
-  			this._storage.set(i, pair);
-  			break;
-		} else if (Object.keys(this._storage.get(i))[0] === k) {
-  			this._storage.set(i, pair);
-  			break;
-		}
-
-		if (i === this._limit-1) {
-			i = -1;
-		}
-	}
-
-
-
-	this._loadFactor = Math.ceil(100 * this._occupied/this._limit);
+	AdvHashTable.findSpaceAndPlace(k,v,this);
 
 	if (this._loadFactor >= 75) {
 		this._limit *= 2;
-		var newArray = LimitedArray(this._limit);
+		var oldArray = [];
 
-		this._storage.each(function(val, key) {
-			newArray.set(key, val);
+		this._storage.each(function(val) {
+			oldArray.push(val);
 		});
 
-		this._storage = newArray;
+		this._storage = LimitedArray(this._limit);
+		this._occupied = 0;
+		this._loadFactor = 0;
+
+		for (var i = 0; i < oldArray.length; i++) {
+			if (oldArray[i] !== undefined)
+			{
+				// AdvHashTable.testPair(oldArray[i]);
+
+				AdvHashTable.findSpaceAndPlace(oldArray[i][0], oldArray[i][1], this);
+							
+				// AdvHashTable.testPair([undefined,undefined]);
+				// var advval = AdvHashTable.prototype.retrieve.call(this,oldArray[i][0]);
+				// AdvHashTable.testPair([oldArray[i][0],advval]);
+			}
+		}
 	}
 };
 
 AdvHashTable.prototype.retrieve = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
-  	var check = -1;
 
-	for (var i = index; i < this._limit; i++)
-	{
+	for (var i = index; i < this._limit; i++) {
 		if (this._storage.get(i) !== undefined) {
-			if (Object.keys(this._storage.get(i))[0] === k) {
-  				return this._storage.get(i)[k];
+			if (this._storage.get(i)[0] === k) {
+				return this._storage.get(i)[1];
 			}
 		}
-
-		if (i === this._limit-1) {
-			i = -1;
-			check = index-1;
-		}
-		if (i === check) {
-			break;
+	}
+	for (var i = 0; i < index; i++) {
+		if (this._storage.get(i) !== undefined) {
+			if (this._storage.get(i)[0] === k) {
+				return this._storage.get(i)[1];
+			}
 		}
 	}
 
@@ -73,21 +64,37 @@ AdvHashTable.prototype.remove = function(k) {
 
 	for (var i = index; i < this._limit; i++) {
 		if (this._storage.get(i) !== undefined) {
-			if (Object.keys(this._storage.get(i))[0] === k) {
+		 	if (this._storage.get(i)[0] === k) {	
 				this._occupied--;
  				this._storage.set(i, undefined);
 
- 				this._loadFactor = Math.ceil(100 * this._occupied/this._limit);
+ 				this._loadFactor = Math.floor(100 * this._occupied/this._limit);
 
 				if (this._loadFactor < 25) {
 					this._limit /= 2;
-					var newArray = LimitedArray(this._limit);
 
-					this._storage.each(function(val, key) {
-						newArray.set(key, val);
+					var oldArray = [];
+
+					this._storage.each(function(val) {
+						oldArray.push(val);
 					});
 
-					this._storage = newArray;
+					this._storage = LimitedArray(this._limit);
+					this._occupied = 0;
+					this._loadFactor = 0;
+
+					for (var i = 0; i < oldArray.length; i++) {
+						if (oldArray[i] !== undefined)
+						{
+							// AdvHashTable.testPair(oldArray[i]);
+
+							AdvHashTable.findSpaceAndPlace(oldArray[i][0], oldArray[i][1], this);
+							
+							// AdvHashTable.testPair([undefined,undefined]);
+							// var advval = AdvHashTable.prototype.retrieve.call(this,oldArray[i][0]);
+							// AdvHashTable.testPair([oldArray[i][0],advval]);
+						}
+					}
 				}
 				
 				break;
@@ -112,7 +119,36 @@ AdvHashTable.prototype.remove = function(k) {
 	}
 };
 
+AdvHashTable.findSpaceAndPlace = function(key, val, store) {
+					var index = getIndexBelowMaxForKey(key, store._limit);
+					var pair = [];
+			  		pair[0] = key;
+			  		pair[1] = val;
 
+			  		var test = store._limit;
+					
+					for (var i = index; i < store._limit; i++)
+					{
+						if (store._storage.get(i) === undefined) {
+				  			store._storage.set(i, pair);
+				  			break;
+						} else if (store._storage.get(i)[0] === key) {	
+				  			store._storage.set(i, pair);
+				  			break;
+						}
+
+						if (i === store._limit-1) {
+							i = -1;
+						}
+					}
+			  		store._occupied++;
+					store._loadFactor = Math.ceil(100 * store._occupied/store._limit);
+				}
+
+// AdvHashTable.testPair = function(pair) {
+// 	this._testPair1 = pair[0];
+// 	this._testPair2 = pair[1];
+// }
 
 /*
  * Complexity: What is the time complexity of the above functions?
