@@ -1,8 +1,8 @@
-describe('twoWayTree', function() {
+describe('tree', function() {
   var tree;
 
   beforeEach(function() {
-    tree = Tree();
+    tree = TwoWayTree();
   });
 
   it('should have methods named "addChild" and "contains", and a property named "value"', function() {
@@ -39,6 +39,14 @@ describe('twoWayTree', function() {
     tree.children[1].addChild(8);
     expect(tree.contains(7)).to.equal(true);
     expect(tree.contains(8)).to.equal(true);
+  });
+
+  it('should dissociate removed child from parent', function() {
+    tree.addChild(5);
+    tree.children[0].addChild(7);
+    tree.addChild(4);
+    tree.children[0].removeFromParent();
+    expect(tree.children[0].value).to.equal(4);
   });
 
 });
