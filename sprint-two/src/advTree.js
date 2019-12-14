@@ -1,4 +1,4 @@
-var TwoWayTree = function(value) {
+var AdvTree = function(value) {
   var newTree = {};
   newTree.value = value;
 
@@ -16,7 +16,7 @@ var TwoWayTree = function(value) {
 var treeMethods = {};
 
 treeMethods.addChild = function(value) {
-	var newTree = TwoWayTree(value);
+	var newTree = AdvTree(value);
 	newTree.parent = this;
 
 	this.children.push(newTree);
@@ -55,7 +55,16 @@ treeMethods.removeFromParent = function() {
 
 		this.parent = undefined;
 	}
-}
+};
+
+
+treeMethods.traverse = function(cb) {
+	cb(this.value);
+
+	for (var i = 0; i < this.children.length; i++) {
+		this.children[i].traverse(cb);
+	}
+};
 
 
 /*
