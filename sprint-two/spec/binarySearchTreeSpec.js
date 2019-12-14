@@ -3,6 +3,7 @@ describe('binarySearchTree', function() {
 
   beforeEach(function() {
     binarySearchTree = BinarySearchTree(5);
+    // binarySearchTree.insert(5);
   });
 
   it('should have methods named "insert", "contains", and "depthFirstLog', function() {
@@ -57,9 +58,8 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(10);
     binarySearchTree.insert(15);
     binarySearchTree.insert(13);
-    binarySearchTree.updateHeight();
-    binarySearchTree.updateMinHeight();
+    binarySearchTree.updateTreeProperties();
     expect(binarySearchTree.height).to.eql(5);
-    expect(binarySearchTree.minHeight).to.eql(4);
+    expect(binarySearchTree.minHeight).to.eql(3);
   });
 });
