@@ -170,6 +170,15 @@ BSTmethods.rotate = function() {
 	//   \
 	//    \
 	//    /
+	if (this.right) {
+		if (!this.left) {
+			var gp = this.right;
+
+			if (gp.left && gp.right) {
+				this.left = gp.left;
+				gp.left = undefined;
+			}
+		}
 		if (this.right.right && !this.right.left) {
 			if (this.right.right.left && !this.right.right.right) {
 				var c = this.right.right.left;
@@ -189,6 +198,72 @@ BSTmethods.rotate = function() {
 					p.left = undefined;
 					// p.right = undefined;
 				}
+			}
+		}
+		//  \
+		//  /
+		//  \
+		if (this.right.left && !this.right.right) {
+			if (this.right.left.right && !this.right.left.left) {
+				var c = this.right.left.right;
+				var p = this.right.left;
+				var gp = this.right;
+
+				if (c === undefined && this.left === undefined) {
+					this.left = p;
+					gp.left = undefined;
+				} else {
+					gp.right = c;
+					p.right = undefined;
+				}
+			}
+		}
+		//  \
+		//  /
+		// /
+		if (this.right.left && !this.right.left) {
+			if (this.right.left.left && !this.right.left.right) {
+				var c = this.right.right.left;
+				var p = this.right.right;
+				var gp = this.right;
+
+				c.left = gp;
+				c.right = p;
+				this.right = c;
+
+				// gp.left = undefined;
+				gp.right = undefined;
+				p.left = undefined;
+				// p.right = undefined;
+			}
+		}
+		// \
+		//  \
+		//   \
+		if (this.right.right && !this.right.left) {
+			if (this.right.right.right && !this.right.right.left) {
+				var c = this.right.right.left;
+				var p = this.right.right;
+				var gp = this.right;
+
+				c.left = gp;
+				c.right = p;
+				this.right = c;
+
+				// gp.left = undefined;
+				gp.right = undefined;
+				p.left = undefined;
+				// p.right = undefined;
+			}
+		}
+	}
+	if (this.left) {		
+		if (!this.right) {
+			var gp = this.left;
+
+			if (gp.left && gp.right) {
+				this.right = gp.right;
+				gp.right = undefined;
 			}
 		}
 		//  /
@@ -213,24 +288,6 @@ BSTmethods.rotate = function() {
 				}
 			}
 		}
-		//  \
-		//  /
-		//  \
-		if (this.right.left && !this.right.right) {
-			if (this.right.left.right && !this.right.left.left) {
-				var c = this.right.left.right;
-				var p = this.right.left;
-				var gp = this.right;
-
-				if (c === undefined && this.left === undefined) {
-					this.left = p;
-					gp.left = undefined;
-				} else {
-					gp.right = c;
-					p.right = undefined;
-				}
-			}
-		}
 		// /
 		// \
 		// /
@@ -247,25 +304,6 @@ BSTmethods.rotate = function() {
 					gp.right = c;
 					p.left = undefined;
 				}
-			}
-		}
-		//  \
-		//  /
-		// /
-		if (this.right.left && !this.right.left) {
-			if (this.right.left.left && !this.right.left.right) {
-				var c = this.right.right.left;
-				var p = this.right.right;
-				var gp = this.right;
-
-				c.left = gp;
-				c.right = p;
-				this.right = c;
-
-				// gp.left = undefined;
-				gp.right = undefined;
-				p.left = undefined;
-				// p.right = undefined;
 			}
 		}
 		//   /
@@ -285,25 +323,6 @@ BSTmethods.rotate = function() {
 				gp.left = undefined;
 			}
 		}
-		// \
-		//  \
-		//   \
-		if (this.right.right && !this.right.left) {
-			if (this.right.right.right && !this.right.right.left) {
-				var c = this.right.right.left;
-				var p = this.right.right;
-				var gp = this.right;
-
-				c.left = gp;
-				c.right = p;
-				this.right = c;
-
-				// gp.left = undefined;
-				gp.right = undefined;
-				p.left = undefined;
-				// p.right = undefined;
-			}
-		}
 		// /
 		// \
 		//  \
@@ -321,6 +340,160 @@ BSTmethods.rotate = function() {
 				gp.left = undefined;
 			}
 		}
+	}
+
+
+		// if (this.right.right && !this.right.left) {
+		// 	if (this.right.right.left && !this.right.right.right) {
+		// 		var c = this.right.right.left;
+		// 		var p = this.right.right;
+		// 		var gp = this.right;
+
+		// 		if (c === undefined && this.left === undefined) {
+		// 			this.left = p;
+		// 			gp.right = undefined;
+		// 		} else {
+		// 			c.left = gp;
+		// 			c.right = p;
+		// 			this.right = c;
+
+		// 			// gp.left = undefined;
+		// 			gp.right = undefined;
+		// 			p.left = undefined;
+		// 			// p.right = undefined;
+		// 		}
+		// 	}
+		// }
+		// //  /
+		// // /
+		// // \
+		// if (this.left.left && !this.left.right) {
+		// 	if (this.left.left.right && !this.left.left.left) {
+		// 		var c = this.left.left.right;
+		// 		var p = this.left.left;
+		// 		var gp = this.left;
+
+		// 		if (c === undefined && this.right === undefined) {
+		// 			this.right = p;
+		// 			gp.left = undefined;
+		// 		} else {
+		// 			c.right = gp;
+		// 			c.left = p;
+		// 			this.left = c;
+	
+		// 			p.right = undefined;
+		// 			gp.left = undefined;
+		// 		}
+		// 	}
+		// }
+		// //  \
+		// //  /
+		// //  \
+		// if (this.right.left && !this.right.right) {
+		// 	if (this.right.left.right && !this.right.left.left) {
+		// 		var c = this.right.left.right;
+		// 		var p = this.right.left;
+		// 		var gp = this.right;
+
+		// 		if (c === undefined && this.left === undefined) {
+		// 			this.left = p;
+		// 			gp.left = undefined;
+		// 		} else {
+		// 			gp.right = c;
+		// 			p.right = undefined;
+		// 		}
+		// 	}
+		// }
+		// // /
+		// // \
+		// // /
+		// if (this.left.right && !this.left.left) {
+		// 	if (this.left.right.left && !this.left.right.right) {
+		// 		var c = this.left.right.left;
+		// 		var p = this.left.right;
+		// 		var gp = this.left;
+
+		// 		if (c === undefined && this.right === undefined) {
+		// 			this.right = p;
+		// 			gp.right = undefined;
+		// 		} else {
+		// 			gp.right = c;
+		// 			p.left = undefined;
+		// 		}
+		// 	}
+		// }
+		// //  \
+		// //  /
+		// // /
+		// if (this.right.left && !this.right.left) {
+		// 	if (this.right.left.left && !this.right.left.right) {
+		// 		var c = this.right.right.left;
+		// 		var p = this.right.right;
+		// 		var gp = this.right;
+
+		// 		c.left = gp;
+		// 		c.right = p;
+		// 		this.right = c;
+
+		// 		// gp.left = undefined;
+		// 		gp.right = undefined;
+		// 		p.left = undefined;
+		// 		// p.right = undefined;
+		// 	}
+		// }
+		// //   /
+		// //  /
+		// // /
+		// if (this.left.left && !this.left.right) {
+		// 	if (this.left.left.left && !this.left.left.right) {
+		// 		var c = this.left.left.right;
+		// 		var p = this.left.left;
+		// 		var gp = this.left;
+
+		// 		c.right = gp;
+		// 		c.left = p;
+		// 		this.left = c;
+
+		// 		p.right = undefined;
+		// 		gp.left = undefined;
+		// 	}
+		// }
+		// // \
+		// //  \
+		// //   \
+		// if (this.right.right && !this.right.left) {
+		// 	if (this.right.right.right && !this.right.right.left) {
+		// 		var c = this.right.right.left;
+		// 		var p = this.right.right;
+		// 		var gp = this.right;
+
+		// 		c.left = gp;
+		// 		c.right = p;
+		// 		this.right = c;
+
+		// 		// gp.left = undefined;
+		// 		gp.right = undefined;
+		// 		p.left = undefined;
+		// 		// p.right = undefined;
+		// 	}
+		// }
+		// // /
+		// // \
+		// //  \
+		// if (this.left.right && !this.left.left) {
+		// 	if (this.left.right.right && !this.left.right.left) {
+		// 		var c = this.left.left.right;
+		// 		var p = this.left.left;
+		// 		var gp = this.left;
+
+		// 		c.right = gp;
+		// 		c.left = p;
+		// 		this.left = c;
+
+		// 		p.right = undefined;
+		// 		gp.left = undefined;
+		// 	}
+		// }
 }
 
 // BSTmethods.balanceCheck

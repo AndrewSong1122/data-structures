@@ -62,4 +62,18 @@ describe('binarySearchTree', function() {
     expect(binarySearchTree.height).to.eql(5);
     expect(binarySearchTree.minHeight).to.eql(3);
   });
+
+  it('should create a balanced tree', function() {
+    binarySearchTree.insert(3);
+    // binarySearchTree.insert(7);
+    binarySearchTree.insert(1);
+    binarySearchTree.insert(2);
+
+    binarySearchTree.rotate();
+
+    // expect(binarySearchTree.left.right.value).to.be.a('number');
+    expect(binarySearchTree.left.left.value).to.be.a('number');
+    expect(binarySearchTree.left.value).to.be.a('number');
+    expect(binarySearchTree.right.value).to.be.a('number');
+  });
 });
